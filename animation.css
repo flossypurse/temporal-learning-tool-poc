@@ -1,0 +1,80 @@
+.a-container {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.col-md-3, .col-md-4, .col-md-8, .col-md-12 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.highlight-container {
+  width: 100%;
+  padding: 15px;
+  margin: 0;
+  font-family: "Courier";
+  color: #141414;
+}
+
+.highlightable {
+  padding: 0;
+  margin: 0;
+
+}
+
+.highlight {
+  background-color: #a8ffbf;
+}
+
+.highlight-group {
+  background-color: #8cddff;
+}
+
+.one-tab {
+  padding-left: 15px;
+}
+
+.two-tab {
+  padding-left: 30px;
+}
+
+.three-tab {
+  padding-left: 45px;
+}
+
+#notification-container {
+  height: 50px;
+  width: 100%;
+  text-align: center;
+  background-color: #efefef;
+  font-size: 18px;
+  padding:12px;
+}
+
+#event-history-container {
+  text-align: center;
+}
+
+.event {
+  width: 100%;
+  border: 1px solid #141414;
+  padding: 8px;
+  margin-bottom: 1px;
+}
+
+#canvas-container{
+  width: 1200px;
+  height: 600px;
+  padding: 0;
+  margin: auto 0;
+}
+
+#animation-canvas {
+
+}
+
+.button-padding {
+  padding-top: 15px;
+}

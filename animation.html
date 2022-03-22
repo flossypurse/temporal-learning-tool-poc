@@ -1,0 +1,153 @@
+<html>
+  <head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous" />
+    <!-- Latest compiled and minified JavaScript -->
+    <link rel="stylesheet" type="text/css" href="animation.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="animation.js"></script>
+  </head>
+  <body>
+    <!-- CODE -->
+    <div class="a-container">
+      <!-- WORKER STARTER -->
+      <div class="col-md-4">
+        <div class="highlight-container">
+          <h4>Worker Program</h4>
+          <p class="highlightable">package main</p>
+          <br />
+          <p class="highlightable">import (</p>
+          <p class="highlightable one-tab">"log"</p>
+          <br />
+          <p class="highlightable one-tab">"go.temporal.io/sdk/client"</p>
+          <p class="highlightable one-tab">"go.temporal.io/sdk/worker"</p>
+          <br />
+          <p class="highlightable one-tab">"github.com/temporalio/samples-go/hello"</p>
+          <p class="highlightable">)</p>
+          <br />
+          <p class="highlightable worker-step-0">func main() {</p>
+          <p class="highlightable one-tab worker-step-1">temporalClient, err := client.NewClient(client.Options{})</p>
+          <p class="highlightable one-tab">if err != nil {</p>
+          <p class="highlightable two-tab">log.Fatalln("Unable to create client", err)</p>
+          <p class="highlightable one-tab">}</p>
+          <p class="highlightable one-tab">defer temporalClient.Close()</p>
+          <p class="highlightable one-tab worker-step-2">workerEntity := worker.New(temporalClient, "your-task-queue-1", worker.Options{})</p>
+          <p class="highlightable one-tab worker-step-3">workerEntity.RegisterWorkflow(hello.YourWorkflow)</p>
+          <p class="highlightable one-tab worker-step-4">workerEntity.RegisterActivity(hello.YourActivity)</p>
+          <p class="highlightable one-tab worker-step-5">err = workerEntity.Run(worker.InterruptCh())</p>
+          <p class="highlightable one-tab">if err != nil {</p>
+          <p class="highlightable two-tab">log.Fatalln("Unable to start Worker", err)</p>
+          <p class="highlightable one-tab">}</p>
+          <p class="highlightable">}</p>
+        </div>
+        <p><button id="start-worker">Start Worker</button></p>
+      </div>
+      <div class="col-md-4">
+        <div class="highlight-container">
+          <h4>Workflow Execution Starter Program</h4>
+          <p class="highlightable">package main</p>
+          <br />
+          <p class="highlightable">import (</p>
+          <p class="highlightable one-tab">"context"</p>
+          <p class="highlightable one-tab">"log"</p>
+          <br />
+          <p class="highlightable one-tab">"go.temporal.io/sdk/client"</p>
+          <p class="highlightable one-tab">"github.com/temporalio/samples-go/hello"</p>
+          <p class="highlightable">)</p>
+          <br />
+          <p class="highlightable execution-step-0">func main() {</p>
+          <p class="highlightable one-tab execution-step-1">temporalClient, err := client.NewClient(client.Options{})</p>
+          <p class="highlightable one-tab">if err != nil {</p>
+          <p class="highlightable two-tab">log.Fatalln("Unable to create client", err)</p>
+          <p class="highlightable one-tab">}</p>
+          <p class="highlightable one-tab">defer temporalClient.Close()</p>
+          <p class="highlightable one-tab execution-step-2">workflowOptions := client.StartWorkflowOptions{</p>
+          <p class="highlightable two-tab execution-step-2">TaskQueue: "your-task-queue-1",</p>
+          <p class="highlightable one-tab execution-step-2">}</p>
+          <p class="highlightable one-tab execution-step-3">we, err := temporalClient.ExecuteWorkflow(context.Background(), workflowOptions, hello.YourWorkflow)</p>
+          <p class="highlightable one-tab">if err != nil {</p>
+          <p class="highlightable two-tab">log.Fatalln("Unable to execute workflow", err)</p>
+          <p class="highlightable one-tab">}</p>
+          <p class="highlightable one-tab execution-step-10">var result string</p>
+          <p class="highlightable one-tab execution-step-10">err = we.Get(context.Background(), &result)</p>
+          <p class="highlightable one-tab">if err != nil {</p>
+          <p class="highlightable two-tab">log.Fatalln("Unable get workflow result", err)</p>
+          <p class="highlightable one-tab">}</p>
+          <p class="highlightable one-tab execution-step-11">log.Println("Workflow result:", result)</p>
+          <p class="highlightable">}</p>
+        </div>
+        <p><button id="start-workflow-execution">Start Workflow Execution</button></p>
+      </div>
+      <div class="col-md-4">
+        <div class="highlight-container">
+          <h4>Workflow & Activity Definitions</h4>
+          <p class="highlightable">package hello</p>
+          <br />
+          <p class="highlightable">import (</p>
+          <p class="highlightable one-tab">"context"</p>
+          <p class="highlightable one-tab">"time"</p>
+          <br />
+          <p class="highlightable one-tab">"go.temporal.io/sdk/workflow"</p>
+          <p class="highlightable">)</p>
+          <br />
+          <div id="workflow-definition-highlight-group">
+            <p class="highlightable execution-step-4">func YourWorkflow(ctx workflow.Context) (string, error) {</p>
+            <p class="highlightable one-tab execution-step-5">ao := workflow.ActivityOptions{</p>
+            <p class="highlightable two-tab execution-step-5">StartToCloseTimeout: 10 * time.Second,</p>
+            <p class="highlightable one-tab execution-step-5">}</p>
+            <p class="highlightable one-tab execution-step-5">ctx = workflow.WithActivityOptions(ctx, ao)</p>
+            <p class="highlightable one-tab execution-step-8">var result string</p>
+            <p class="highlightable one-tab execution-step-6 execution-step-8">err := workflow.ExecuteActivity(ctx, YourActivity).Get(ctx, &result)</p>
+            <p class="highlightable one-tab">if err != nil {</p>
+            <p class="highlightable two-tab">return "", err</p>
+            <p class="highlightable one-tab">}</p>
+            <p class="highlightable one-tab execution-step-9">return result, nil</p>
+            <p class="highlightable">}</p>
+          </div>
+          <br />
+          <div class="execution-step-7" id="activity-definition-highlight-group">
+            <p class="highlightable">func YourActivity(ctx context.Context) (string, error) {</p>
+            <p class="highlightable one-tab">return "Hello World!", nil</p>
+            <p class="highlightable">}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- NOTIFICATIONS -->
+    <div class="a-container">
+      <div class="col-md-12">
+        <div id="notification-container">
+
+        </div>
+      </div>
+
+    </div>
+    <!-- CANVAS -->
+    <div class="a-container">
+      <div class="col-md-8">
+        <div id="canvas-container">
+            <canvas id="animation-canvas" width='1200' height='600'></canvas>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div id="event-history-container">
+            <h4>Workflow Execution Event History</h4>
+            <p class="event hidden" id="workflowexecutionstarted">WorkflowExecutionStarted</p>
+            <p class="event hidden" id="workflowtaskscheduled-1">WorkflowTaskScheduled</p>
+            <p class="event hidden" id="workflowtaskstarted-1">WorkflowTaskStarted</p>
+            <p class="event hidden" id="workflowtaskcompleted-1">WorkflowTaskCompleted</p>
+            <p class="event hidden" id="activitytaskscheduled">ActivityTaskScheduled</p>
+            <p class="event hidden" id="activitytaskstarted">ActivityTaskStarted</p>
+            <p class="event hidden" id="activitytaskcompleted">ActivityTaskCompleted</p>
+            <p class="event hidden" id="workflowtaskscheduled-2">WorkflowTaskScheduled</p>
+            <p class="event hidden" id="workflowtaskstarted-2">WorkflowTaskStarted</p>
+            <p class="event hidden" id="workflowtaskcompleted-2">WorkflowTaskCompleted</p>
+            <p class="event hidden" id="workflowexecutioncompleted">WorkflowExecutionCompleted</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
